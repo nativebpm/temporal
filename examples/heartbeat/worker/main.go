@@ -4,14 +4,14 @@ import (
 	"log"
 
 	"github.com/nativebpm/temporal"
-	"github.com/nativebpm/temporal/examples/helloworld"
+	"github.com/nativebpm/temporal/examples/heartbeat"
 )
 
 func main() {
-	// Load configuration
+	// Load configuration from environment
 	cfg := temporal.LoadFromEnv()
 
-	// Initialize our client
+	// Initialize Temporal client
 	client, err := temporal.NewClient(cfg)
 	if err != nil {
 		log.Fatalf("Failed to create Temporal client: %v", err)
@@ -22,10 +22,10 @@ func main() {
 	w := temporal.NewWorker(client, cfg.TaskQueue)
 
 	// Register Workflow and Activity
-	w.RegisterWorkflow(helloworld.GreetWorkflow)
-	w.RegisterActivity(helloworld.GreetActivity)
+	w.RegisterWorkflow(heartbeat.HeartbeatWorkflow)
+	w.RegisterActivity(heartbeat.HeartbeatActivity)
 
-	log.Printf("Worker helloworld started successfully for Task Queue: %s", cfg.TaskQueue)
+	log.Printf("Worker heartbeat successfully started for Task Queue: %s", cfg.TaskQueue)
 
 	// Run worker in blocking mode until interrupted
 	err = w.Run(nil)
